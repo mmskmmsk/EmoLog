@@ -22,7 +22,7 @@ export const setLocalStorageAndReturnData = (data, key = "diary") => {
 
 export const getLocalStorageAndReturnData = (key = "diary") => {
   const endcodedData = localStorage.getItem(key);
-  if (!endcodedData) return null;
+  if (!endcodedData) return [];
 
   try {
     return JSON.parse(decodeURIComponent(endcodedData));
