@@ -20,6 +20,7 @@ const Home = () => {
   const { dateRef } = useContext(DiaryStateContext);
   const [PivotDate, DateChange] = useReducer(reducer, dateRef.current);
   const [sortType, SortTypeChange] = useReducer(reducer, "latest");
+
   useEffect(() => {
     dateRef.current = PivotDate;
   }, [PivotDate]);

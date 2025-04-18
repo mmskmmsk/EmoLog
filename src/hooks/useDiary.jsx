@@ -5,6 +5,7 @@ const useDiary = (id) => {
   const { data } = useContext(DiaryStateContext);
   const { navigate } = useContext(DiaryDispatchContext);
   const [diaryItem, setDiaryItem] = useState();
+  console.log(data);
 
   useEffect(() => {
     const currentDiaryItem = data.find(

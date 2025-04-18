@@ -1,6 +1,6 @@
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
-import Home from "./pages/HoMe";
+import Home from "./pages/Home";
 import New from "./pages/New";
 import Diary from "./pages/Diary";
 import NotFound from "./pages/NotFound";

@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import { useContext } from "react";
-import { DiaryDispatchContext, DiaryStateContext } from "../App";
+import { DiaryDispatchContext } from "../App";
 import Button from "../components/Button";
 import Viewer from "../components/Viewer";
 import useDiary from "../hooks/useDiary";
+import usePageTitle from "../hooks/usePageTitle";
 
 const Diary = () => {
   const { id } = useParams();
   const { navigate } = useContext(DiaryDispatchContext);
   const diaryItem = useDiary(id);
+  usePageTitle(`Into Your EmoLog`);
 
   return (
     <div className="Diary">

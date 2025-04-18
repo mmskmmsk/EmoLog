@@ -5,11 +5,13 @@ import { useContext } from "react";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import useDiary from "../hooks/useDiary";
+import usePageTitle from "../hooks/usePageTitle";
 
 const Edit = () => {
   const { id } = useParams();
   const { navigate, onUpdate, onDelete } = useContext(DiaryDispatchContext);
   const diaryItem = useDiary(id);
+  usePageTitle(`Tweak Your EmoLog`);
 
   return (
     <div>
