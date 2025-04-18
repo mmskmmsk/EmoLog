@@ -31,3 +31,17 @@ export const getLocalStorageAndReturnData = (key = "diary") => {
     return null;
   }
 };
+
+export const getMaxIdFromLocalStorage = (key = "diary") => {
+  let maxId = 0;
+  const endcodedData = localStorage.getItem(key);
+
+  if (!endcodedData) return maxId;
+
+  JSON.parse(decodeURIComponent(endcodedData)).forEach((item) => {
+    if (Number(item.id) > Number(maxId)) {
+      maxId = item.id;
+    }
+  });
+  return ++maxId;
+};

@@ -8,6 +8,7 @@ import Edit from "./pages/Edit";
 import { createContext, useReducer, useRef } from "react";
 import {
   getLocalStorageAndReturnData,
+  getMaxIdFromLocalStorage,
   setLocalStorageAndReturnData,
 } from "./util/function";
 
@@ -72,7 +73,7 @@ export const DiaryDispatchContext = createContext();
 
 function App() {
   const navigate = useNavigate();
-  const idRef = useRef(Number(localStorage.getItem("currentId") || 0));
+  const idRef = useRef(getMaxIdFromLocalStorage() || 0);
   const dateRef = useRef(new Date());
   const [data, dispatch] = useReducer(
     reducer,
@@ -85,7 +86,7 @@ function App() {
     dispatch({
       type: "CREATE",
       data: {
-        id: setLocalStorageAndReturnData(++idRef.current, "currentId"),
+        id: idRef.current++,
         createdDate,
         emotionId,
         content,
