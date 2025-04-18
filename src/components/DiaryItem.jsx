@@ -1,4 +1,3 @@
-// import { useContext } from "react";
 import Button from "./Button";
 import { DiaryDispatchContext, DiaryStateContext } from "../App";
 import "./DiaryItem.css";
@@ -6,7 +5,6 @@ import { useContext } from "react";
 import { getEmotionImage } from "../util/get-emotion-image";
 
 const DiaryItem = ({ id, createdDate, emotionId, content }) => {
-  // const { data } = useContext(DiaryStateContext);
   const { navigate } = useContext(DiaryDispatchContext);
 
   return (
@@ -23,7 +21,9 @@ const DiaryItem = ({ id, createdDate, emotionId, content }) => {
         className="info_section"
         onClick={() => navigate(`/diary/${id}`)}>
         <div className="created_date">{createdDate.toLocaleDateString()}</div>
-        <div className="content">{content}</div>
+        <div className="content">
+          {content.length > 36 ? content.substring(0, 36) + "..." : content}
+        </div>
       </div>
       <div className="button_section">
         <Button

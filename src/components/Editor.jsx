@@ -2,7 +2,7 @@ import { useReducer, useContext, useEffect, useRef } from "react";
 import { emotionIds, getEmotionImage } from "../util/get-emotion-image";
 import Button from "./Button";
 import "./Editor.css";
-import { DiaryDispatchContext } from "../App";
+import { DiaryDispatchContext, DiaryStateContext } from "../App";
 import { getStringedDate } from "../util/function";
 
 const reducer = (state, action) => {
@@ -21,13 +21,12 @@ const reducer = (state, action) => {
 };
 const Editor = ({ onSubmit, diaryItem }) => {
   const { navigate } = useContext(DiaryDispatchContext);
+  const { dateRef } = useContext(DiaryStateContext);
   const [data, dispatch] = useReducer(reducer, {
     selectedId: 0,
-    date: new Date(),
+    date: dateRef.current ? dateRef.current : new Date(),
     content: "",
   });
-  const dateRef = useRef();
-  const emotionRef = useRef();
   const contentRef = useRef();
 
   useEffect(() => {
@@ -41,13 +40,21 @@ const Editor = ({ onSubmit, diaryItem }) => {
   }, [diaryItem]);
 
   const onSubmitSave = () => {
-    if (!data.date) {
-      dateRef.current.focus();
-    } else if (!data.emotionId) {
-      emotionRef.current.focus();
+    if (!data.date || isNaN(new Date(data.date).getTime())) {
+      alert("Please select a date");
+    } else if (!data.selectedId) {
+      alert("Please select an emotion");
+    } else if (!data.content) {
+      contentRef.current.focus();
+    } else {
+      onSubmit(data);
+      dateRef.current = new Date(
+        data.date.getFullYear(),
+        data.date.getMonth(),
+        dateRef.current.getDate()
+      );
+      navigate("/", { replace: true });
     }
-    onSubmit(data);
-    navigate("/", { replace: true });
   };
 
   return (
@@ -55,7 +62,6 @@ const Editor = ({ onSubmit, diaryItem }) => {
       <section className="date_section">
         <h4>Today's Date</h4>
         <input
-          ref={dateRef}
           value={getStringedDate(data.date)}
           onChange={(e) =>
             dispatch({
@@ -72,7 +78,6 @@ const Editor = ({ onSubmit, diaryItem }) => {
           {emotionIds.map(({ key, value }) => {
             return (
               <div
-                ref={emotionRef}
                 className={`EmotionItem ${
                   key === data.selectedId ? `emotion_img_active_${key}` : ""
                 }`}

@@ -13,3 +13,21 @@ export const getStringedDate = (Date) => {
 
   return `${year}-${month}-${date}`;
 };
+
+export const setLocalStorageAndReturnData = (data, key = "diary") => {
+  const endcodedData = encodeURIComponent(JSON.stringify(data));
+  localStorage.setItem(key, endcodedData);
+  return data;
+};
+
+export const getLocalStorageAndReturnData = (key = "diary") => {
+  const endcodedData = localStorage.getItem(key);
+  if (!endcodedData) return null;
+
+  try {
+    return JSON.parse(decodeURIComponent(endcodedData));
+  } catch (error) {
+    console.error("Decode error:", error);
+    return null;
+  }
+};

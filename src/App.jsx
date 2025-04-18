@@ -4,10 +4,12 @@ import Home from "./pages/HoMe";
 import New from "./pages/New";
 import Diary from "./pages/Diary";
 import NotFound from "./pages/NotFound";
-import Button from "./components/Button";
-import Header from "./components/Header";
 import Edit from "./pages/Edit";
 import { createContext, useReducer, useRef } from "react";
+import {
+  getLocalStorageAndReturnData,
+  setLocalStorageAndReturnData,
+} from "./util/function";
 
 const mockData = [
   {
@@ -51,13 +53,17 @@ const mockData = [
 const reducer = (state, action) => {
   switch (action.type) {
     case "CREATE":
-      return [...state, action.data];
+      return setLocalStorageAndReturnData([...state, action.data]);
     case "UPDATE":
-      return state.map((item) =>
-        String(item.id) === String(action.data.id) ? action.data : item
+      return setLocalStorageAndReturnData(
+        state.map((item) =>
+          String(item.id) === String(action.data.id) ? action.data : item
+        )
       );
     case "DELETE":
-      return state.filter((item) => String(item.id) !== String(action.data.id));
+      return setLocalStorageAndReturnData(
+        state.filter((item) => String(item.id) !== String(action.data.id))
+      );
   }
 };
 
@@ -66,14 +72,20 @@ export const DiaryDispatchContext = createContext();
 
 function App() {
   const navigate = useNavigate();
-  const idRef = useRef(6);
-  const [data, dispatch] = useReducer(reducer, mockData);
+  const idRef = useRef(Number(localStorage.getItem("currentId") || 0));
+  const dateRef = useRef(new Date());
+  const [data, dispatch] = useReducer(
+    reducer,
+    getLocalStorageAndReturnData().map((item) => {
+      return { ...item, createdDate: new Date(item.createdDate) };
+    }) || []
+  );
 
   const onCreate = (createdDate, emotionId, content) => {
     dispatch({
       type: "CREATE",
       data: {
-        id: idRef.current++,
+        id: setLocalStorageAndReturnData(++idRef.current, "currentId"),
         createdDate,
         emotionId,
         content,
@@ -104,7 +116,7 @@ function App() {
 
   return (
     <>
-      <DiaryStateContext value={{ data }}>
+      <DiaryStateContext value={{ data, dateRef }}>
         <DiaryDispatchContext
           value={{
             onCreate,

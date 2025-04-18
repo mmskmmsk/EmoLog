@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import Editor from "../components/Editor";
-import { DiaryDispatchContext, DiaryStateContext } from "../App";
+import { DiaryDispatchContext } from "../App";
 import { useContext } from "react";
 import Header from "../components/Header";
 import Button from "../components/Button";
